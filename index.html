@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ryana - Offline-first code snippet and error manager for IT students">
+  <meta name="theme-color" content="#16213e">
+  
+  <title>Ryana - Your Second Mind for Code</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/lib/prism.css">
+  <link rel="stylesheet" href="/css/themes.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <!-- Loading Screen (shown while app initializes) -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <h1>Ryana</h1>
+      <p>Your second mind for code</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Main App Container -->
+  <div id="app" class="app-container" style="display: none;">
+    
+    <!-- Header / Navigation -->
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="app-title">Ryana</h1>
+        <p class="app-tagline">Your second mind for code</p>
+      </div>
+      
+      <div class="header-right">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle dark/light theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+        
+        <!-- Settings -->
+        <button id="settings-btn" class="icon-btn" title="Settings" aria-label="Open settings">
+          <span>⚙️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" data-view="all">
+            <span class="nav-icon">📚</span>
+            <span class="nav-label">All Snippets</span>
+          </button>
+          
+          <button class="nav-btn" data-view="favorites">
+            <span class="nav-icon">⭐</span>
+            <span class="nav-label">Favorites</span>
+          </button>
+          
+          <button class="nav-btn" data-view="errors">
+            <span class="nav-icon">🐛</span>
+            <span class="nav-label">Error Logs</span>
+          </button>
+          
+          <button class="nav-btn" data-view="subjects">
+            <span class="nav-icon">🎨</span>
+            <span class="nav-label">Subjects</span>
+          </button>
+          
+          <hr class="nav-divider">
+          
+          <button class="nav-btn" data-view="import-export">
+            <span class="nav-icon">💾</span>
+            <span class="nav-label">Import/Export</span>
+          </button>
+        </nav>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button id="new-snippet-btn" class="btn btn-primary">
+            <span>+ New Snippet</span>
+          </button>
+          
+          <button id="new-error-btn" class="btn btn-secondary">
+            <span>+ Log Error</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Content Views (Different pages will be shown/hidden here) -->
+      <section class="content-area">
+        
+        <!-- Search Bar (appears on all views) -->
+        <div class="search-container">
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="Search snippets, tags, subjects... (Ctrl+K)"
+            autocomplete="off"
+          >
+          <button id="clear-search" class="clear-search-btn" style="display: none;">✕</button>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <select id="language-filter" class="filter-select">
+            <option value="">All Languages</option>
+            <!-- Populated dynamically -->
+          </select>
+          
+          <select id="subject-filter" class="filter-select">
+            <option value="">All Subjects</option>
+            <!-- Populated dynamically -->
+          </select>
+          
+          <select id="sort-by" class="filter-select">
+            <option value="updated">Recently Updated</option>
+            <option value="created">Recently Created</option>
+            <option value="title">Title A-Z</option>
+            <option value="copied">Most Copied</option>
+            <option value="viewed">Most Viewed</option>
+          </select>
+        </div>
+
+        <!-- All Snippets View -->
+        <div id="view-all" class="view active">
+          <div class="view-header">
+            <h2>All Snippets</h2>
+            <span id="snippet-count" class="count-badge">0</span>
+          </div>
+          
+          <div id="snippets-grid" class="snippets-grid">
+            <!-- Snippets will be rendered here dynamically -->
+            <div class="empty-state">
+              <p>No snippets yet. Create your first one!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Favorites View -->
+        <div id="view-favorites" class="view">
+          <div class="view-header">
+            <h2>Favorite Snippets</h2>
+            <span id="favorites-count" class="count-badge">0</span>
+          </div>
+          
+          <div id="favorites-grid" class="snippets-grid">
+            <div class="empty-state">
+              <p>No favourites yet. Star snippets to see them here!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Logs View -->
+        <div id="view-errors" class="view">
+          <div class="view-header">
+            <h2>Error Logs</h2>
+            <span id="errors-count" class="count-badge">0</span>
+          </div>
+          
+          <div id="errors-grid" class="snippets-grid">
+            <div class="empty-state">
+              <p>No errors logged yet. Document your mistakes to learn faster!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subjects View -->
+        <div id="view-subjects" class="view">
+          <div class="view-header">
+            <h2>Subjects</h2>
+            <button id="new-subject-btn" class="btn btn-small">+ Add Subject</button>
+          </div>
+          
+          <div id="subjects-grid" class="subjects-grid">
+            <div class="empty-state">
+              <p>No subjects created. Add your courses to organize snippets!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Import/Export View -->
+        <div id="view-import-export" class="view">
+          <div class="view-header">
+            <h2>Import / Export</h2>
+          </div>
+          
+          <div class="import-export-container">
+            <div class="export-section">
+              <h3>Export Your Data</h3>
+              <p>Download all your snippets, subjects, and settings as a JSON file.</p>
+              <button id="export-all-btn" class="btn btn-primary">Export All Data</button>
+              <button id="export-selected-btn" class="btn btn-secondary">Export Selected Snippets</button>
+            </div>
+            
+            <hr>
+            
+            <div class="import-section">
+              <h3>Import Data</h3>
+              <p>Upload a previously exported JSON file to restore or merge snippets.</p>
+              <input type="file" id="import-file-input" accept=".json" style="display: none;">
+              <button id="import-btn" class="btn btn-primary">Choose File to Import</button>
+              <div id="import-status" class="import-status"></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- Modals (hidden by default, shown when needed) -->
+  
+  <!-- Snippet Editor Modal -->
+  <div id="snippet-modal" class="modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="snippet-modal-title">New Snippet</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <!-- Form will be populated dynamically -->
+      </div>
+      
+      <div class="modal-footer">
+        <button id="save-snippet-btn" class="btn btn-primary">Save Snippet</button>
+        <button class="btn btn-secondary modal-close">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <!-- Settings form will be populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/lib/prism.js"></script>
+  <script src="/js/db.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/import-export.js"></script>
+  <script src="/js/app.js"></script>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    // Register service worker for offline support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('✅ Service Worker registered:', registration.scope);
+          })
+          .catch((error) => {
+            console.error('❌ Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

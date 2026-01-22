@@ -1,0 +1,330 @@
+/**
+ * Ryana Theme System
+ * Subject-based color coding using HSL for easy manipulation
+ * Students can assign colors to subjects, and tags inherit variations
+ */
+
+/* ==================== DEFAULT SUBJECT COLORS ==================== */
+/* These are starter colors - students can customize them */
+
+.subject-algorithms {
+  --subject-hue: 200;
+  --subject-saturation: 70%;
+  --subject-lightness: 50%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+.subject-web-dev {
+  --subject-hue: 30;
+  --subject-saturation: 80%;
+  --subject-lightness: 55%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+.subject-mobile-dev {
+  --subject-hue: 280;
+  --subject-saturation: 65%;
+  --subject-lightness: 60%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+.subject-databases {
+  --subject-hue: 120;
+  --subject-saturation: 50%;
+  --subject-lightness: 45%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+.subject-networking {
+  --subject-hue: 180;
+  --subject-saturation: 60%;
+  --subject-lightness: 50%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+.subject-security {
+  --subject-hue: 0;
+  --subject-saturation: 70%;
+  --subject-lightness: 50%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+.subject-data-structures {
+  --subject-hue: 260;
+  --subject-saturation: 60%;
+  --subject-lightness: 55%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+.subject-oop {
+  --subject-hue: 320;
+  --subject-saturation: 65%;
+  --subject-lightness: 50%;
+  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+}
+
+/* ==================== DYNAMIC COLOR UTILITIES ==================== */
+
+/* 
+  These classes use HSL manipulation to create variations
+  This allows tags to be lighter/darker versions of subject colors
+*/
+
+.color-base {
+  background-color: var(--subject-color);
+  border-color: var(--subject-color);
+}
+
+.color-light {
+  background-color: hsl(var(--subject-hue), var(--subject-saturation), 85%);
+  border-color: var(--subject-color);
+}
+
+.color-lighter {
+  background-color: hsl(var(--subject-hue), var(--subject-saturation), 95%);
+  border-color: var(--subject-color);
+}
+
+.color-dark {
+  background-color: hsl(var(--subject-hue), var(--subject-saturation), 35%);
+  border-color: var(--subject-color);
+}
+
+.color-border {
+  border-left: 4px solid var(--subject-color);
+}
+
+.color-accent {
+  color: var(--subject-color);
+}
+
+/* ==================== TAG COLOR VARIATIONS ==================== */
+
+/* Tags inherit subject color but are lighter for visual hierarchy */
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 0.25rem;
+  background-color: hsl(var(--subject-hue), calc(var(--subject-saturation) - 20%), 90%);
+  color: hsl(var(--subject-hue), var(--subject-saturation), 30%);
+  border: 1px solid hsl(var(--subject-hue), var(--subject-saturation), 70%);
+}
+
+[data-theme="dark"] .tag {
+  background-color: hsl(var(--subject-hue), calc(var(--subject-saturation) - 30%), 25%);
+  color: hsl(var(--subject-hue), var(--subject-saturation), 80%);
+  border-color: hsl(var(--subject-hue), var(--subject-saturation), 40%);
+}
+
+/* ==================== SNIPPET CARD COLORS ==================== */
+
+.snippet-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  border-left: 4px solid var(--subject-color);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.snippet-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: var(--spacing-md);
+}
+
+.snippet-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.snippet-meta {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+}
+
+.snippet-language {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--subject-color);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.snippet-subject {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: hsl(var(--subject-hue), calc(var(--subject-saturation) - 10%), 85%);
+  color: var(--subject-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .snippet-subject {
+  background: hsl(var(--subject-hue), calc(var(--subject-saturation) - 20%), 30%);
+  color: hsl(var(--subject-hue), var(--subject-saturation), 80%);
+}
+
+.snippet-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+}
+
+.snippet-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.snippet-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ==================== SUBJECT GRID ==================== */
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.subject-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  border-top: 6px solid var(--subject-color);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+  cursor: pointer;
+}
+
+.subject-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.subject-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.subject-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.subject-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.subject-color-preview {
+  width: 100%;
+  height: 40px;
+  border-radius: var(--border-radius-sm);
+  background: linear-gradient(
+    135deg,
+    var(--subject-color),
+    hsl(var(--subject-hue), var(--subject-saturation), calc(var(--subject-lightness) + 15%))
+  );
+  margin-top: var(--spacing-md);
+}
+
+/* ==================== ERROR LOG STYLING ==================== */
+
+.error-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  border-left: 4px solid var(--error);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+  cursor: pointer;
+}
+
+.error-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.error-message {
+  font-family: var(--font-mono);
+  background: hsl(0, 70%, 95%);
+  color: hsl(0, 70%, 40%);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-md);
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+
+[data-theme="dark"] .error-message {
+  background: hsl(0, 50%, 20%);
+  color: hsl(0, 70%, 80%);
+}
+
+/* ==================== FAVORITE STAR ==================== */
+
+.favorite-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: transform var(--transition-fast);
+}
+
+.favorite-btn:hover {
+  transform: scale(1.2);
+}
+
+.favorite-btn.active {
+  color: #ffd700;
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+
+.color-picker-preview {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--border-color);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.color-picker-preview:hover {
+  transform: scale(1.1);
+}
