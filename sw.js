@@ -14,7 +14,7 @@ const STATIC_ASSETS = [
   '/manifest.json',
   '/css/main.css',
   '/css/themes.css',
-  '/css/prism-theme.css',
+  '/css/prism-theme.css', // this file does not exist
   '/js/app.js',
   '/js/db.js',
   '/js/ui.js',
@@ -22,7 +22,6 @@ const STATIC_ASSETS = [
   '/js/import-export.js',
   '/lib/prism.js',
   '/lib/prism.css',
-  // Icons - add actual paths once created
   '/assets/icons/icon-192x192.png',
   '/assets/icons/icon-512x512.png'
 ];
