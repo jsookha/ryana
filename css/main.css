@@ -878,3 +878,180 @@ code, pre {
     padding: var(--spacing-md);
   }
 }
+
+/**
+ * Ryana CSS Hotfixes
+ * Add these to the END of your main.css file
+ * These fix critical bugs in light mode and modal display
+ */
+
+/* ==================== FIX 1: Language Badge Visibility (Light Mode) ==================== */
+
+/* The language badge should ALWAYS have a colored background with white text */
+.snippet-language {
+  /* Force the background to use the subject color, NOT white */
+  background: var(--subject-color) !important;
+  color: white !important;
+  /* Add slight shadow for better readability on light backgrounds */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* For very light subject colors (4 & 5), use darker variant */
+.subject-4 .snippet-language,
+.subject-5 .snippet-language {
+  background: var(--subject-color) !important;
+  color: var(--subject-color-contrast) !important;
+}
+
+/* ==================== FIX 2: Code Snippet Readability ==================== */
+
+/* Fix code background and text color in both themes */
+.detail-code pre {
+  background: var(--bg-secondary);
+  color: var(--text-primary); /* This was missing! */
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.detail-code code {
+  color: var(--text-primary); /* Ensure code text is readable */
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+/* Prism.js will override some of these with syntax colors - that's fine */
+.detail-code pre code {
+  background: transparent;
+}
+
+/* ==================== FIX 3: Modal Detail View Badge Alignment ==================== */
+
+/* Better spacing and alignment for badges in detail modal */
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center; /* Vertical alignment fix */
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Make sure all badges in detail view are properly sized */
+.detail-meta .snippet-language,
+.detail-meta .snippet-subject,
+.detail-meta .tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px; /* Fixed height for alignment */
+  padding: 0 10px;
+  line-height: 1;
+}
+
+/* ==================== FIX 4: Cancel Button Styling ==================== */
+
+/* Ensure modal footer buttons are properly styled */
+.modal-footer .btn {
+  min-width: 100px; /* Consistent button width */
+}
+
+.modal-footer .btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.modal-footer .btn-secondary:hover {
+  background: var(--border-color);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* ==================== FIX 5: Subject Card Alignment ==================== */
+
+/* Fix subject card height issues */
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border-top: 6px solid var(--subject-color);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  min-height: 200px; /* Ensure consistent minimum height */
+}
+
+.subject-name {
+  font-family: var(--font-title);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  min-height: 32px; /* Reserve space for title */
+}
+
+.subject-description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+  flex: 1; /* Take up available space */
+  min-height: 60px; /* Reserve space for 2-3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.subject-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  margin-top: auto; /* Push to bottom */
+}
+
+.subject-color-preview {
+  width: 100%;
+  height: 60px;
+  border-radius: var(--border-radius-md);
+  background: linear-gradient(
+    135deg,
+    var(--subject-color) 0%,
+    var(--subject-color-light) 50%,
+    var(--subject-color-lighter) 100%
+  );
+  margin-top: var(--spacing-md);
+  border: 2px solid var(--subject-color);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Don't shrink */
+}
+
+/* ==================== ADDITIONAL: Form Textarea Fix ==================== */
+
+/* Ensure code input textarea is also readable */
+.form-group textarea {
+  font-family: var(--font-mono);
+  resize: vertical;
+  line-height: 1.5;
+  background: var(--bg-secondary);
+  color: var(--text-primary); /* Make sure text is visible */
+}
+
+/* ==================== ADDITIONAL: Error Card Badge Fix ==================== */
+
+/* Make sure error cards also show language badge properly */
+.error-card .snippet-language {
+  background: var(--error) !important;
+  color: white !important;
+}
