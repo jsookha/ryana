@@ -1,74 +1,418 @@
 /**
- * Ryana Theme System
- * Subject-based color coding using HSL for easy manipulation
- * Students can assign colors to subjects, and tags inherit variations
+ * Ryana Theme System - Version 2.0
+ * 10 Subject Colors + Improved Card Design
  */
 
-/* ==================== DEFAULT SUBJECT COLORS ==================== */
-/* These are starter colors - students can customize them */
+/* ==================== 10 SUBJECT COLOR DEFINITIONS ==================== */
+/* Based on your extended color array */
 
-.subject-algorithms {
-  --subject-hue: 200;
-  --subject-saturation: 70%;
-  --subject-lightness: 50%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+.subject-1 {
+  --subject-hue: 197;
+  --subject-saturation: 100%;
+  --subject-lightness: 5%;
+  --subject-color: hsl(197, 100%, 5%); /* Ink Black */
+  --subject-color-light: hsl(197, 100%, 15%);
+  --subject-color-lighter: hsl(197, 100%, 85%);
+  --subject-color-contrast: hsl(197, 100%, 95%);
 }
 
-.subject-web-dev {
+.subject-2 {
+  --subject-hue: 190;
+  --subject-saturation: 100%;
+  --subject-lightness: 23%;
+  --subject-color: hsl(190, 100%, 23%); /* Dark Teal */
+  --subject-color-light: hsl(190, 100%, 35%);
+  --subject-color-lighter: hsl(190, 60%, 85%);
+  --subject-color-contrast: hsl(190, 100%, 95%);
+}
+
+.subject-3 {
+  --subject-hue: 181;
+  --subject-saturation: 88%;
+  --subject-lightness: 31%;
+  --subject-color: hsl(181, 88%, 31%); /* Dark Cyan */
+  --subject-color-light: hsl(181, 88%, 45%);
+  --subject-color-lighter: hsl(181, 50%, 85%);
+  --subject-color-contrast: hsl(181, 88%, 95%);
+}
+
+.subject-4 {
+  --subject-hue: 160;
+  --subject-saturation: 41%;
+  --subject-lightness: 70%;
+  --subject-color: hsl(160, 41%, 70%); /* Pearl Aqua */
+  --subject-color-light: hsl(160, 41%, 80%);
+  --subject-color-lighter: hsl(160, 41%, 90%);
+  --subject-color-contrast: hsl(160, 41%, 20%);
+}
+
+.subject-5 {
+  --subject-hue: 45;
+  --subject-saturation: 60%;
+  --subject-lightness: 78%;
+  --subject-color: hsl(45, 60%, 78%); /* Vanilla Custard */
+  --subject-color-light: hsl(45, 60%, 85%);
+  --subject-color-lighter: hsl(45, 60%, 92%);
+  --subject-color-contrast: hsl(45, 60%, 25%);
+}
+
+.subject-6 {
+  --subject-hue: 39;
+  --subject-saturation: 100%;
+  --subject-lightness: 47%;
+  --subject-color: hsl(39, 100%, 47%); /* Golden Orange */
+  --subject-color-light: hsl(39, 100%, 60%);
+  --subject-color-lighter: hsl(39, 100%, 90%);
+  --subject-color-contrast: hsl(39, 100%, 10%);
+}
+
+.subject-7 {
   --subject-hue: 30;
-  --subject-saturation: 80%;
-  --subject-lightness: 55%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+  --subject-saturation: 98%;
+  --subject-lightness: 40%;
+  --subject-color: hsl(30, 98%, 40%); /* Burnt Caramel */
+  --subject-color-light: hsl(30, 98%, 55%);
+  --subject-color-lighter: hsl(30, 98%, 90%);
+  --subject-color-contrast: hsl(30, 98%, 95%);
 }
 
-.subject-mobile-dev {
-  --subject-hue: 280;
-  --subject-saturation: 65%;
-  --subject-lightness: 60%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+.subject-8 {
+  --subject-hue: 19;
+  --subject-saturation: 97%;
+  --subject-lightness: 37%;
+  --subject-color: hsl(19, 97%, 37%); /* Rusty Spice */
+  --subject-color-light: hsl(19, 97%, 52%);
+  --subject-color-lighter: hsl(19, 97%, 90%);
+  --subject-color-contrast: hsl(19, 97%, 95%);
 }
 
-.subject-databases {
-  --subject-hue: 120;
-  --subject-saturation: 50%;
-  --subject-lightness: 45%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+.subject-9 {
+  --subject-hue: 5;
+  --subject-saturation: 81%;
+  --subject-lightness: 38%;
+  --subject-color: hsl(5, 81%, 38%); /* Oxidized Iron */
+  --subject-color-light: hsl(5, 81%, 53%);
+  --subject-color-lighter: hsl(5, 81%, 90%);
+  --subject-color-contrast: hsl(5, 81%, 95%);
 }
 
-.subject-networking {
-  --subject-hue: 180;
-  --subject-saturation: 60%;
-  --subject-lightness: 50%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+.subject-10 {
+  --subject-hue: 358;
+  --subject-saturation: 64%;
+  --subject-lightness: 37%;
+  --subject-color: hsl(358, 64%, 37%); /* Brown Red */
+  --subject-color-light: hsl(358, 64%, 52%);
+  --subject-color-lighter: hsl(358, 64%, 90%);
+  --subject-color-contrast: hsl(358, 64%, 95%);
 }
 
-.subject-security {
-  --subject-hue: 0;
-  --subject-saturation: 70%;
-  --subject-lightness: 50%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+/* ==================== SNIPPET CARD DESIGN ==================== */
+
+.snippet-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  border-left: 5px solid var(--subject-color);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
-.subject-data-structures {
-  --subject-hue: 260;
-  --subject-saturation: 60%;
-  --subject-lightness: 55%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+.snippet-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg, 
+    var(--subject-color), 
+    var(--subject-color-light)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-fast);
 }
 
-.subject-oop {
-  --subject-hue: 320;
-  --subject-saturation: 65%;
-  --subject-lightness: 50%;
-  --subject-color: hsl(var(--subject-hue), var(--subject-saturation), var(--subject-lightness));
+.snippet-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.snippet-card:hover::before {
+  opacity: 1;
+}
+
+/* ==================== CARD HEADER ==================== */
+
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-md);
+}
+
+.snippet-title {
+  font-family: var(--font-title);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.favorite-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-xl);
+  transition: transform var(--transition-fast);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.15);
+  background: var(--bg-tertiary);
+}
+
+.favorite-btn.active {
+  color: #ffd700;
+}
+
+/* ==================== CARD META (Language & Subject Badges) ==================== */
+
+.snippet-meta {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+}
+
+.snippet-language {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--subject-color);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Light theme fix - ensure language badge is always visible */
+[data-theme="light"] .snippet-language {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark theme - slightly lighter background for dark subject colors */
+[data-theme="dark"] .subject-1 .snippet-language,
+[data-theme="dark"] .subject-2 .snippet-language {
+  background: var(--subject-color-light);
+}
+
+.snippet-subject {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--subject-color-lighter);
+  color: var(--subject-color);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  font-family: var(--font-body);
+  border: 1px solid var(--subject-color-light);
+}
+
+[data-theme="dark"] .snippet-subject {
+  background: var(--subject-color-light);
+  color: var(--subject-color-contrast);
+  border-color: var(--subject-color);
+}
+
+/* ==================== CARD DESCRIPTION ==================== */
+
+.snippet-description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==================== CARD TAGS ==================== */
+
+.snippet-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: var(--border-radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  font-family: var(--font-mono); /* Fira Mono for tags! */
+  margin: 0;
+  background: var(--subject-color-lighter);
+  color: var(--subject-color);
+  border: 1px solid var(--subject-color-light);
+  transition: all var(--transition-fast);
+}
+
+.tag:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .tag {
+  background: var(--subject-color-light);
+  color: var(--subject-color-contrast);
+  border-color: var(--subject-color);
+}
+
+/* ==================== CARD FOOTER ==================== */
+
+.snippet-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
+/* ==================== ERROR CARD STYLING ==================== */
+
+.error-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  border-left: 5px solid var(--error);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+  cursor: pointer;
+}
+
+.error-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.error-message {
+  font-family: var(--font-mono);
+  background: var(--accent-light);
+  color: var(--error);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--text-sm);
+  overflow-x: auto;
+  line-height: 1.5;
+  border: 1px solid var(--error);
+}
+
+[data-theme="dark"] .error-message {
+  background: rgba(255, 77, 109, 0.1);
+  color: var(--error);
+}
+
+/* ==================== SUBJECT CARDS ==================== */
+
+.subject-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border-top: 6px solid var(--subject-color);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.subject-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--subject-color),
+    var(--subject-color-light)
+  );
+}
+
+.subject-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.subject-name {
+  font-family: var(--font-title);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.subject-description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+}
+
+.subject-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+}
+
+.subject-color-preview {
+  width: 100%;
+  height: 60px;
+  border-radius: var(--border-radius-md);
+  background: linear-gradient(
+    135deg,
+    var(--subject-color) 0%,
+    var(--subject-color-light) 50%,
+    var(--subject-color-lighter) 100%
+  );
+  margin-top: var(--spacing-md);
+  border: 2px solid var(--subject-color);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* ==================== DYNAMIC COLOR UTILITIES ==================== */
-
-/* 
-  These classes use HSL manipulation to create variations
-  This allows tags to be lighter/darker versions of subject colors
-*/
 
 .color-base {
   background-color: var(--subject-color);
@@ -76,17 +420,12 @@
 }
 
 .color-light {
-  background-color: hsl(var(--subject-hue), var(--subject-saturation), 85%);
+  background-color: var(--subject-color-light);
   border-color: var(--subject-color);
 }
 
 .color-lighter {
-  background-color: hsl(var(--subject-hue), var(--subject-saturation), 95%);
-  border-color: var(--subject-color);
-}
-
-.color-dark {
-  background-color: hsl(var(--subject-hue), var(--subject-saturation), 35%);
+  background-color: var(--subject-color-lighter);
   border-color: var(--subject-color);
 }
 
@@ -98,233 +437,30 @@
   color: var(--subject-color);
 }
 
-/* ==================== TAG COLOR VARIATIONS ==================== */
+/* ==================== DETAIL VIEW BADGE STYLES ==================== */
 
-/* Tags inherit subject color but are lighter for visual hierarchy */
-.tag {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin: 0.25rem;
-  background-color: hsl(var(--subject-hue), calc(var(--subject-saturation) - 20%), 90%);
-  color: hsl(var(--subject-hue), var(--subject-saturation), 30%);
-  border: 1px solid hsl(var(--subject-hue), var(--subject-saturation), 70%);
+.detail-meta .snippet-language,
+.detail-meta .snippet-subject,
+.detail-meta .tag {
+  /* Inherit styles from above */
 }
 
-[data-theme="dark"] .tag {
-  background-color: hsl(var(--subject-hue), calc(var(--subject-saturation) - 30%), 25%);
-  color: hsl(var(--subject-hue), var(--subject-saturation), 80%);
-  border-color: hsl(var(--subject-hue), var(--subject-saturation), 40%);
-}
+/* ==================== RESPONSIVE ADJUSTMENTS ==================== */
 
-/* ==================== SNIPPET CARD COLORS ==================== */
-
-.snippet-card {
-  background: var(--bg-secondary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-lg);
-  border-left: 4px solid var(--subject-color);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-  cursor: pointer;
-}
-
-.snippet-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.snippet-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: var(--spacing-md);
-}
-
-.snippet-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.snippet-meta {
-  display: flex;
-  gap: var(--spacing-sm);
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: var(--spacing-md);
-}
-
-.snippet-language {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  background: var(--subject-color);
-  color: white;
-  border-radius: var(--border-radius-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.snippet-subject {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  background: hsl(var(--subject-hue), calc(var(--subject-saturation) - 10%), 85%);
-  color: var(--subject-color);
-  border-radius: var(--border-radius-sm);
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-[data-theme="dark"] .snippet-subject {
-  background: hsl(var(--subject-hue), calc(var(--subject-saturation) - 20%), 30%);
-  color: hsl(var(--subject-hue), var(--subject-saturation), 80%);
-}
-
-.snippet-description {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: var(--spacing-md);
-  line-height: 1.5;
-}
-
-.snippet-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
-}
-
-.snippet-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-color);
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-/* ==================== SUBJECT GRID ==================== */
-
-.subjects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
-}
-
-.subject-card {
-  background: var(--bg-secondary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-lg);
-  border-top: 6px solid var(--subject-color);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast);
-  cursor: pointer;
-}
-
-.subject-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.subject-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-sm);
-}
-
-.subject-description {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: var(--spacing-md);
-}
-
-.subject-stats {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.subject-color-preview {
-  width: 100%;
-  height: 40px;
-  border-radius: var(--border-radius-sm);
-  background: linear-gradient(
-    135deg,
-    var(--subject-color),
-    hsl(var(--subject-hue), var(--subject-saturation), calc(var(--subject-lightness) + 15%))
-  );
-  margin-top: var(--spacing-md);
-}
-
-/* ==================== ERROR LOG STYLING ==================== */
-
-.error-card {
-  background: var(--bg-secondary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-lg);
-  border-left: 4px solid var(--error);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast);
-  cursor: pointer;
-}
-
-.error-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.error-message {
-  font-family: var(--font-mono);
-  background: hsl(0, 70%, 95%);
-  color: hsl(0, 70%, 40%);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-sm);
-  margin-bottom: var(--spacing-md);
-  font-size: 0.85rem;
-  overflow-x: auto;
-}
-
-[data-theme="dark"] .error-message {
-  background: hsl(0, 50%, 20%);
-  color: hsl(0, 70%, 80%);
-}
-
-/* ==================== FAVORITE STAR ==================== */
-
-.favorite-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  transition: transform var(--transition-fast);
-}
-
-.favorite-btn:hover {
-  transform: scale(1.2);
-}
-
-.favorite-btn.active {
-  color: #ffd700;
-}
-
-/* ==================== UTILITY CLASSES ==================== */
-
-.color-picker-preview {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 3px solid var(--border-color);
-  cursor: pointer;
-  transition: transform var(--transition-fast);
-}
-
-.color-picker-preview:hover {
-  transform: scale(1.1);
+@media (max-width: 768px) {
+  .snippet-card {
+    padding: var(--spacing-md);
+  }
+  
+  .snippet-title {
+    font-size: var(--text-base);
+  }
+  
+  .subject-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .subject-name {
+    font-size: var(--text-lg);
+  }
 }
