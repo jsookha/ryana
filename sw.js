@@ -9,21 +9,21 @@ const RUNTIME_CACHE = 'ryana-runtime-v1.0.0';
 
 // Assets to cache on install (critical files for offline use)
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/css/main.css',
-  '/css/themes.css',
-  '/css/prism-theme.css', // this file does not exist
-  '/js/app.js',
-  '/js/db.js',
-  '/js/ui.js',
-  '/js/search.js',
-  '/js/import-export.js',
-  '/lib/prism.js',
-  '/lib/prism.css',
-  '/assets/icons/icon-192x192.png',
-  '/assets/icons/icon-512x512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './css/main.css',
+  './css/themes.css',
+  // '/css/prism-theme.css', // this file does not exist
+  './js/app.js',
+  './js/db.js',
+  './js/ui.js',
+  './js/search.js',
+  './js/import-export.js',
+  './lib/prism.js',
+  './lib/prism.css',
+  './assets/icons/icon-192x192.png',
+  './assets/icons/icon-512x512.png'
 ];
 
 /**
