@@ -880,87 +880,69 @@ code, pre {
 }
 
 /**
- * Ryana CSS Hotfixes
- * Add these to the END of your main.css file
- * These fix critical bugs in light mode and modal display
+ * Ryana CSS Fixes V3
+ * Replace the hotfixes section in main.css with this updated version
  */
 
-/* ==================== FIX 1: Language Badge Visibility (Light Mode) ==================== */
+/* ==================== FIX 1: Language Badge - ALWAYS RED/ACCENT COLOR ==================== */
 
-/* The language badge should ALWAYS have a colored background with white text */
+/* All language badges use accent highlight (raspberry) color */
 .snippet-language {
-  /* Force the background to use the subject color, NOT white */
-  background: var(--subject-color) !important;
+  background: var(--accent-highlight) !important;
   color: white !important;
-  /* Add slight shadow for better readability on light backgrounds */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-/* For very light subject colors (4 & 5), use darker variant */
-.subject-4 .snippet-language,
-.subject-5 .snippet-language {
-  background: var(--subject-color) !important;
-  color: var(--subject-color-contrast) !important;
-}
-
-/* ==================== FIX 2: Code Snippet Readability ==================== */
-
-/* Fix code background and text color in both themes */
-.detail-code pre {
-  background: var(--bg-secondary);
-  color: var(--text-primary); /* This was missing! */
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius-md);
-  overflow-x: auto;
-  border: 1px solid var(--border-color);
-}
-
-.detail-code code {
-  color: var(--text-primary); /* Ensure code text is readable */
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  line-height: 1.6;
-}
-
-/* Prism.js will override some of these with syntax colors - that's fine */
-.detail-code pre code {
-  background: transparent;
-}
-
-/* ==================== FIX 3: Modal Detail View Badge Alignment ==================== */
-
-/* Better spacing and alignment for badges in detail modal */
-.detail-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
-  align-items: center; /* Vertical alignment fix */
-  margin-bottom: var(--spacing-lg);
-}
-
-/* Make sure all badges in detail view are properly sized */
-.detail-meta .snippet-language,
-.detail-meta .snippet-subject,
-.detail-meta .tag {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  height: 24px; /* Fixed height for alignment */
-  padding: 0 10px;
-  line-height: 1;
+  padding: 4px 10px;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* ==================== FIX 4: Cancel Button Styling ==================== */
+/* Ensure consistency in both themes */
+[data-theme="light"] .snippet-language,
+[data-theme="dark"] .snippet-language {
+  background: var(--accent-highlight) !important;
+  color: white !important;
+}
 
-/* Ensure modal footer buttons are properly styled */
+/* Error cards keep the error color */
+.error-card .snippet-language {
+  background: var(--error) !important;
+  color: white !important;
+}
+
+/* ==================== FIX 2: Modal Button Consistency ==================== */
+
+/* All modal buttons same size */
 .modal-footer .btn {
-  min-width: 100px; /* Consistent button width */
+  min-width: 120px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.modal-footer .btn-primary {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.modal-footer .btn-primary:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .modal-footer .btn-secondary {
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--text-sm);
+  font-weight: 600;
 }
 
 .modal-footer .btn-secondary:hover {
@@ -969,9 +951,141 @@ code, pre {
   transform: translateY(-1px);
 }
 
-/* ==================== FIX 5: Subject Card Alignment ==================== */
+/* ==================== FIX 3: Improved Card Layout with Visual Separation ==================== */
 
-/* Fix subject card height issues */
+.snippet-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  border-left: 5px solid var(--subject-color);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-height: 220px;
+}
+
+/* Add subtle top border for visual interest */
+.snippet-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--subject-color);
+  opacity: 0.3;
+}
+
+.snippet-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ==================== FIX 4: Tags with Colored Backgrounds ==================== */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: var(--border-radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  font-family: var(--font-mono);
+  margin: 0;
+  background: var(--subject-color);
+  color: white;
+  border: none;
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* For light subject colors, use darker text */
+.subject-4 .tag,
+.subject-5 .tag {
+  color: var(--subject-color-contrast);
+}
+
+/* ==================== FIX 5: Modal Detail View - Better Visual Hierarchy ==================== */
+
+/* Make main title larger and more prominent */
+.modal-header h2 {
+  font-family: var(--font-title);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Section headings smaller */
+.detail-description h4,
+.detail-code h4,
+.detail-errors h4,
+.detail-usage h4 {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+  font-family: var(--font-title);
+  font-size: var(--text-base);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--accent-primary);
+  padding-bottom: var(--spacing-xs);
+}
+
+/* Better badge layout in detail view */
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
+}
+
+/* Ensure all badges same height */
+.detail-meta .snippet-language,
+.detail-meta .snippet-subject,
+.detail-meta .tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 12px;
+  line-height: 1;
+}
+
+/* ==================== FIX 6: Code Display Readability ==================== */
+
+.detail-code pre {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.detail-code code {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+/* ==================== FIX 7: Subject Cards - Bottom Section Clarity ==================== */
+
 .subject-card {
   display: flex;
   flex-direction: column;
@@ -984,7 +1098,7 @@ code, pre {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  min-height: 200px; /* Ensure consistent minimum height */
+  min-height: 240px;
 }
 
 .subject-name {
@@ -993,7 +1107,6 @@ code, pre {
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: var(--spacing-sm);
-  min-height: 32px; /* Reserve space for title */
 }
 
 .subject-description {
@@ -1002,10 +1115,10 @@ code, pre {
   font-family: var(--font-body);
   margin-bottom: var(--spacing-md);
   line-height: 1.6;
-  flex: 1; /* Take up available space */
-  min-height: 60px; /* Reserve space for 2-3 lines */
+  flex: 1;
+  min-height: 60px;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1018,12 +1131,15 @@ code, pre {
   font-family: var(--font-body);
   font-weight: 500;
   margin-bottom: var(--spacing-md);
-  margin-top: auto; /* Push to bottom */
+  padding: var(--spacing-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-sm);
 }
 
+/* Color preview with label */
 .subject-color-preview {
   width: 100%;
-  height: 60px;
+  height: 50px;
   border-radius: var(--border-radius-md);
   background: linear-gradient(
     135deg,
@@ -1031,27 +1147,121 @@ code, pre {
     var(--subject-color-light) 50%,
     var(--subject-color-lighter) 100%
   );
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
   border: 2px solid var(--subject-color);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0; /* Don't shrink */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ==================== ADDITIONAL: Form Textarea Fix ==================== */
+/* Add snippet count to subject card (JS will populate this) */
+.subject-snippet-count {
+  display: flex;
+  justify-content: space-around;
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+}
 
-/* Ensure code input textarea is also readable */
+.subject-snippet-count span {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.subject-snippet-count span:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ==================== FIX 8: Form Elements Consistency ==================== */
+
 .form-group textarea {
   font-family: var(--font-mono);
   resize: vertical;
   line-height: 1.5;
   background: var(--bg-secondary);
-  color: var(--text-primary); /* Make sure text is visible */
+  color: var(--text-primary);
 }
 
-/* ==================== ADDITIONAL: Error Card Badge Fix ==================== */
+/* ==================== FIX 9: Responsive - Show Quick Actions on Mobile ==================== */
 
-/* Make sure error cards also show language badge properly */
-.error-card .snippet-language {
-  background: var(--error) !important;
-  color: white !important;
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -260px;
+    height: 100%;
+    transition: left var(--transition-medium);
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  /* Quick actions should be visible even when sidebar is closed */
+  .quick-actions {
+    position: fixed;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: 99;
+    flex-direction: row;
+    gap: var(--spacing-sm);
+  }
+  
+  .quick-actions .btn {
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    font-size: var(--text-lg);
+  }
+  
+  .quick-actions .btn span {
+    display: none;
+  }
+  
+  .quick-actions .btn::before {
+    content: '+';
+    font-size: var(--text-2xl);
+    font-weight: bold;
+  }
+  
+  .snippets-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .subjects-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    width: 95%;
+  }
+  
+  .content-area {
+    padding: var(--spacing-md);
+  }
+  
+  .app-header {
+    padding: var(--spacing-md);
+  }
 }
