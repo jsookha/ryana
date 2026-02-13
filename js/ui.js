@@ -687,3 +687,137 @@ const UI = {
     return date.toLocaleDateString();
   }
 };
+
+/**
+ * ADD THESE FUNCTIONS TO YOUR EXISTING ui.js FILE
+ * These enhance the UI with new capabilities
+ */
+
+// ==========================================================================
+// ADD THIS FUNCTION - Toast with Action Button
+// ==========================================================================
+
+/**
+ * Show toast notification with clickable action
+ * @param {string} message - Message to show
+ * @param {string} type - 'success', 'error', 'info'
+ * @param {Function} action - Function to call when clicked
+ */
+UI.showToastWithAction = function(message, type = 'info', action) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type} toast-clickable`;
+  toast.style.cursor = 'pointer';
+  toast.textContent = message;
+
+  // Add click handler
+  if (action) {
+    toast.addEventListener('click', () => {
+      action();
+      toast.remove();
+    });
+  }
+
+  container.appendChild(toast);
+
+  // Auto-remove after 8 seconds (longer than normal toasts)
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  }, 8000);
+};
+
+// ==========================================================================
+// REPLACE YOUR renderSubjects FUNCTION WITH THIS UPDATED VERSION
+// ==========================================================================
+
+/**
+ * Render subjects with snippet/error counts
+ * @param {Array} subjects - Array of subject objects with counts
+ */
+UI.renderSubjects = function(subjects) {
+  const container = document.getElementById('subjects-grid');
+  
+  if (subjects.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <p>No subjects created. Add your courses to organise snippets!</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = '';
+  subjects.forEach(subject => {
+    const card = this.createSubjectCardWithCounts(subject);
+    container.appendChild(card);
+  });
+};
+
+/**
+ * Create subject card with snippet/error counts
+ * @param {Object} subject - Subject object with counts
+ * @returns {HTMLElement}
+ */
+UI.createSubjectCardWithCounts = function(subject) {
+  const card = document.createElement('div');
+  card.className = `subject-card subject-${subject.colorIndex || 1}`;
+
+  card.innerHTML = `
+    <h3 class="subject-name">${this.escapeHtml(subject.name)}</h3>
+    ${subject.description ? `<p class="subject-description">${this.escapeHtml(subject.description)}</p>` : ''}
+    <div class="subject-stats">
+      <span>Year ${subject.year}</span>
+      <span>Semester ${subject.semester}</span>
+    </div>
+    
+    <!-- NEW: Snippet/Error counts -->
+    <div class="subject-snippet-count">
+      <span class="count-snippets" data-subject="${this.escapeHtml(subject.name)}">
+        📝 ${subject.snippetCount || 0} Snippet${subject.snippetCount !== 1 ? 's' : ''}
+      </span>
+      <span class="count-errors" data-subject="${this.escapeHtml(subject.name)}">
+        🐛 ${subject.errorCount || 0} Error${subject.errorCount !== 1 ? 's' : ''}
+      </span>
+    </div>
+    
+    <div class="subject-color-preview"></div>
+  `;
+
+  // Click card to edit
+  card.addEventListener('click', (e) => {
+    // Don't trigger if clicking on counts
+    if (e.target.classList.contains('count-snippets') || 
+        e.target.classList.contains('count-errors')) {
+      return;
+    }
+    this.editSubject(subject);
+  });
+
+  // Click snippet count to filter
+  const snippetCount = card.querySelector('.count-snippets');
+  snippetCount.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (subject.snippetCount > 0) {
+      // Switch to snippets view with subject filter
+      App.state.filters.subject = subject.name;
+      document.getElementById('subject-filter').value = subject.name;
+      App.switchView('snippets');
+    }
+  });
+
+  // Click error count to filter
+  const errorCount = card.querySelector('.count-errors');
+  errorCount.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (subject.errorCount > 0) {
+      // Switch to errors view with subject filter
+      App.state.filters.subject = subject.name;
+      document.getElementById('subject-filter').value = subject.name;
+      App.switchView('errors');
+    }
+  });
+
+  return card;
+};
+

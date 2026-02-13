@@ -9,12 +9,12 @@
   <title>Ryana - Your Second Mind for Code</title>
   
   <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="./manifest.json">
   
   <!-- Icons -->
-  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-32x32.png"  />
-  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
-  <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="./assets/icons/favicon-32x32.png"  />
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192x192.png">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="./lib/prism.css">
@@ -60,30 +60,38 @@
       <!-- Sidebar Navigation -->
       <aside class="sidebar">
         <nav class="sidebar-nav">
-          <button class="nav-btn active" data-view="all">
-            <span class="nav-icon">📚</span>
-            <span class="nav-label">All Snippets</span>
+          <!-- NEW: Home View -->
+          <button class="nav-btn active" data-view="home">
+            <span class="nav-icon" id="icon-home">🏠</span>
+            <span class="nav-label">Home</span>
           </button>
           
-          <button class="nav-btn" data-view="favorites">
-            <span class="nav-icon">⭐</span>
-            <span class="nav-label">Favorites</span>
+          <!-- UPDATED: "All Snippets" → "Snippets" -->
+          <button class="nav-btn" data-view="snippets">
+            <span class="nav-icon" id="icon-snippets">📚</span>
+            <span class="nav-label">Snippets</span>
+          </button>
+          
+          <!-- UPDATED: "Favorites" → "Favourites" (British English) -->
+          <button class="nav-btn" data-view="favourites">
+            <span class="nav-icon" id="icon-favourites">⭐</span>
+            <span class="nav-label">Favourites</span>
           </button>
           
           <button class="nav-btn" data-view="errors">
-            <span class="nav-icon">🐛</span>
+            <span class="nav-icon" id="icon-errors">🐛</span>
             <span class="nav-label">Error Logs</span>
           </button>
           
           <button class="nav-btn" data-view="subjects">
-            <span class="nav-icon">🎨</span>
+            <span class="nav-icon" id="icon-subjects">🎨</span>
             <span class="nav-label">Subjects</span>
           </button>
           
           <hr class="nav-divider">
           
           <button class="nav-btn" data-view="import-export">
-            <span class="nav-icon">💾</span>
+            <span class="nav-icon" id="icon-import-export">💾</span>
             <span class="nav-label">Import/Export</span>
           </button>
         </nav>
@@ -136,29 +144,43 @@
           </select>
         </div>
 
-        <!-- All Snippets View -->
-        <div id="view-all" class="view active">
+        <!-- NEW: Home View (Shows ALL content) -->
+        <div id="view-home" class="view active">
           <div class="view-header">
-            <h2>All Snippets</h2>
-            <span id="snippet-count" class="count-badge">0</span>
+            <h2>All Content</h2>
+            <span id="home-count" class="count-badge">0</span>
           </div>
           
-          <div id="snippets-grid" class="snippets-grid">
-            <!-- Snippets will be rendered here dynamically -->
+          <div id="home-grid" class="snippets-grid">
+            <!-- ALL snippets and errors will be rendered here -->
             <div class="empty-state">
-              <p>No snippets yet. Create your first one!</p>
+              <p>No content yet. Create your first snippet or log an error!</p>
             </div>
           </div>
         </div>
 
-        <!-- Favorites View -->
-        <div id="view-favorites" class="view">
+        <!-- UPDATED: "All Snippets" → "Snippets" View (Code only) -->
+        <div id="view-snippets" class="view">
           <div class="view-header">
-            <h2>Favorite Snippets</h2>
-            <span id="favorites-count" class="count-badge">0</span>
+            <h2>Code Snippets</h2>
+            <span id="snippet-count" class="count-badge">0</span>
           </div>
           
-          <div id="favorites-grid" class="snippets-grid">
+          <div id="snippets-grid" class="snippets-grid">
+            <div class="empty-state">
+              <p>No code snippets yet. Create your first one!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Favourites View (British English) -->
+        <div id="view-favourites" class="view">
+          <div class="view-header">
+            <h2>Favourite Snippets</h2>
+            <span id="favourites-count" class="count-badge">0</span>
+          </div>
+          
+          <div id="favourites-grid" class="snippets-grid">
             <div class="empty-state">
               <p>No favourites yet. Star snippets to see them here!</p>
             </div>
@@ -188,7 +210,7 @@
           
           <div id="subjects-grid" class="subjects-grid">
             <div class="empty-state">
-              <p>No subjects created. Add your courses to organize snippets!</p>
+              <p>No subjects created. Add your courses to organise snippets!</p>
             </div>
           </div>
         </div>

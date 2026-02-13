@@ -1,13 +1,12 @@
 /**
- * Ryana Main Application Controller
- * Coordinates between database, UI, search, and import/export modules
- * Version: 1.0.0
+ * Ryana Main Application Controller - Version 3.0
+ * Added: Home view, smart search, cross-view awareness
  */
 
 const App = {
   // Application state
   state: {
-    currentView: 'all',
+    currentView: 'home', // Default to home view
     selectedSnippets: new Set(),
     filters: {
       language: '',
@@ -25,22 +24,11 @@ const App = {
     console.log('[App] Initializing Ryana...');
 
     try {
-      // Wait for database to be ready
       await this.waitForDatabase();
-
-      // Load settings and apply theme
       await this.loadSettings();
-
-      // Setup event listeners
       this.setupEventListeners();
-
-      // Setup keyboard shortcuts
       this.setupKeyboardShortcuts();
-
-      // Load initial data
       await this.loadInitialData();
-
-      // Hide loading screen, show app
       this.showApp();
 
       console.log('[App] Ryana initialized successfully');
@@ -119,7 +107,6 @@ const App = {
       this.handleSearch(e.target.value);
     });
 
-    // Search keyboard shortcut (Ctrl+K)
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         searchInput.value = '';
@@ -194,7 +181,6 @@ const App = {
    */
   setupKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
-      // Only trigger if not typing in input/textarea
       const isTyping = e.target.tagName === 'INPUT' || 
                        e.target.tagName === 'TEXTAREA' ||
                        e.target.isContentEditable;
@@ -205,22 +191,28 @@ const App = {
         document.getElementById('search-input').focus();
       }
 
-      // Ctrl+N - New snippet (only when not typing)
+      // Ctrl+N - New snippet
       if (e.ctrlKey && e.key === 'n' && !isTyping) {
         e.preventDefault();
         UI.showSnippetModal();
       }
 
-      // Ctrl+E - New error log (only when not typing)
+      // Ctrl+E - New error log
       if (e.ctrlKey && e.key === 'e' && !isTyping) {
         e.preventDefault();
         UI.showSnippetModal('error');
       }
 
-      // Ctrl+F - Toggle favorites view (only when not typing)
+      // Ctrl+H - Home view
+      if (e.ctrlKey && e.key === 'h' && !isTyping) {
+        e.preventDefault();
+        this.switchView('home');
+      }
+
+      // Ctrl+F - Toggle favourites view
       if (e.ctrlKey && e.key === 'f' && !isTyping) {
         e.preventDefault();
-        this.switchView('favorites');
+        this.switchView('favourites');
       }
 
       // Escape - Clear search if search is focused
@@ -235,13 +227,8 @@ const App = {
    */
   async loadInitialData() {
     try {
-      // Load subjects for filter dropdowns
       await this.populateSubjectFilter();
-
-      // Load language filter options
       await this.populateLanguageFilter();
-
-      // Load initial view (all snippets)
       await this.refreshCurrentView();
     } catch (error) {
       console.error('[App] Failed to load initial data:', error);
@@ -256,7 +243,6 @@ const App = {
       const subjects = await DB.getAllSubjects();
       const subjectFilter = document.getElementById('subject-filter');
       
-      // Clear existing options (except "All Subjects")
       subjectFilter.innerHTML = '<option value="">All Subjects</option>';
       
       subjects.forEach(subject => {
@@ -279,7 +265,6 @@ const App = {
       const languages = [...new Set(snippets.map(s => s.language))].sort();
       const languageFilter = document.getElementById('language-filter');
       
-      // Clear existing options (except "All Languages")
       languageFilter.innerHTML = '<option value="">All Languages</option>';
       
       languages.forEach(language => {
@@ -299,7 +284,6 @@ const App = {
   switchView(viewName) {
     console.log('[App] Switching to view:', viewName);
 
-    // Update state
     this.state.currentView = viewName;
 
     // Update active nav button
@@ -321,6 +305,12 @@ const App = {
       viewElement.classList.add('active');
     }
 
+    // Clear filters when switching views (except search)
+    this.state.filters.language = '';
+    this.state.filters.subject = '';
+    document.getElementById('language-filter').value = '';
+    document.getElementById('subject-filter').value = '';
+
     // Load data for the view
     this.refreshCurrentView();
   },
@@ -333,11 +323,14 @@ const App = {
 
     try {
       switch (view) {
-        case 'all':
-          await this.loadAllSnippets();
+        case 'home':
+          await this.loadHome();
           break;
-        case 'favorites':
-          await this.loadFavorites();
+        case 'snippets':
+          await this.loadSnippets();
+          break;
+        case 'favourites':
+          await this.loadFavourites();
           break;
         case 'errors':
           await this.loadErrors();
@@ -346,7 +339,7 @@ const App = {
           await this.loadSubjects();
           break;
         case 'import-export':
-          // No data to load, just UI
+          // No data to load
           break;
       }
     } catch (error) {
@@ -356,31 +349,58 @@ const App = {
   },
 
   /**
-   * Load all snippets view
+   * Load home view (ALL content - snippets + errors)
    */
-  async loadAllSnippets() {
-    const filters = {
-      type: 'code',
-      ...this.state.filters
-    };
+  async loadHome() {
+    let allContent = this.state.searchQuery
+      ? await DB.searchSnippets(this.state.searchQuery)
+      : await DB.getAllSnippets();
 
+    // Apply filters
+    if (this.state.filters.language) {
+      allContent = allContent.filter(s => s.language === this.state.filters.language);
+    }
+    if (this.state.filters.subject) {
+      allContent = allContent.filter(s => s.subject === this.state.filters.subject);
+    }
+
+    // Sort
+    allContent = this.sortSnippets(allContent, this.state.filters.sortBy);
+
+    // Check for cross-view results
+    await this.checkCrossViewResults(allContent, 'all');
+
+    // Update count
+    document.getElementById('home-count').textContent = allContent.length;
+
+    // Render
+    UI.renderSnippets(allContent, 'home-grid');
+  },
+
+  /**
+   * Load snippets view (CODE only)
+   */
+  async loadSnippets() {
     let snippets = this.state.searchQuery
       ? await DB.searchSnippets(this.state.searchQuery)
-      : await DB.getAllSnippets(filters);
+      : await DB.getAllSnippets();
 
-    // Filter by type (code only for "all" view)
+    // Filter to code only
     snippets = snippets.filter(s => s.type === 'code');
 
     // Apply additional filters
-    if (filters.language) {
-      snippets = snippets.filter(s => s.language === filters.language);
+    if (this.state.filters.language) {
+      snippets = snippets.filter(s => s.language === this.state.filters.language);
     }
-    if (filters.subject) {
-      snippets = snippets.filter(s => s.subject === filters.subject);
+    if (this.state.filters.subject) {
+      snippets = snippets.filter(s => s.subject === this.state.filters.subject);
     }
 
     // Sort
     snippets = this.sortSnippets(snippets, this.state.filters.sortBy);
+
+    // Check for cross-view results
+    await this.checkCrossViewResults(snippets, 'code');
 
     // Update count
     document.getElementById('snippet-count').textContent = snippets.length;
@@ -390,9 +410,9 @@ const App = {
   },
 
   /**
-   * Load favorites view
+   * Load favourites view
    */
-  async loadFavorites() {
+  async loadFavourites() {
     let snippets = await DB.getAllSnippets({ favourite: true });
 
     // Apply search if active
@@ -414,41 +434,42 @@ const App = {
     snippets = this.sortSnippets(snippets, this.state.filters.sortBy);
 
     // Update count
-    document.getElementById('favorites-count').textContent = snippets.length;
+    document.getElementById('favourites-count').textContent = snippets.length;
 
     // Render
-    UI.renderSnippets(snippets, 'favorites-grid');
+    UI.renderSnippets(snippets, 'favourites-grid');
   },
 
   /**
-   * Load errors view
+   * Load errors view (ERRORS only)
    */
   async loadErrors() {
-    let snippets = await DB.getAllSnippets({ type: 'error' });
+    let errors = this.state.searchQuery
+      ? await DB.searchSnippets(this.state.searchQuery)
+      : await DB.getAllSnippets();
 
-    // Apply search if active
-    if (this.state.searchQuery) {
-      const searchResults = await DB.searchSnippets(this.state.searchQuery);
-      const searchIds = new Set(searchResults.map(s => s.id));
-      snippets = snippets.filter(s => searchIds.has(s.id));
-    }
+    // Filter to errors only
+    errors = errors.filter(s => s.type === 'error');
 
-    // Apply filters
+    // Apply additional filters
     if (this.state.filters.language) {
-      snippets = snippets.filter(s => s.language === this.state.filters.language);
+      errors = errors.filter(s => s.language === this.state.filters.language);
     }
     if (this.state.filters.subject) {
-      snippets = snippets.filter(s => s.subject === this.state.filters.subject);
+      errors = errors.filter(s => s.subject === this.state.filters.subject);
     }
 
     // Sort
-    snippets = this.sortSnippets(snippets, this.state.filters.sortBy);
+    errors = this.sortSnippets(errors, this.state.filters.sortBy);
+
+    // Check for cross-view results
+    await this.checkCrossViewResults(errors, 'error');
 
     // Update count
-    document.getElementById('errors-count').textContent = snippets.length;
+    document.getElementById('errors-count').textContent = errors.length;
 
     // Render
-    UI.renderSnippets(snippets, 'errors-grid');
+    UI.renderSnippets(errors, 'errors-grid');
   },
 
   /**
@@ -456,7 +477,69 @@ const App = {
    */
   async loadSubjects() {
     const subjects = await DB.getAllSubjects();
-    UI.renderSubjects(subjects);
+    const snippets = await DB.getAllSnippets();
+
+    // Count snippets/errors per subject
+    const subjectsWithCounts = subjects.map(subject => {
+      const subjectSnippets = snippets.filter(s => 
+        s.subject === subject.name && s.type === 'code'
+      );
+      const subjectErrors = snippets.filter(s => 
+        s.subject === subject.name && s.type === 'error'
+      );
+
+      return {
+        ...subject,
+        snippetCount: subjectSnippets.length,
+        errorCount: subjectErrors.length
+      };
+    });
+
+    UI.renderSubjects(subjectsWithCounts);
+  },
+
+  /**
+   * Check for results in other views and notify user
+   */
+  async checkCrossViewResults(currentResults, currentType) {
+    // Only check if we have a search/filter and no results
+    if (currentResults.length > 0) return;
+    if (!this.state.searchQuery && !this.state.filters.language && !this.state.filters.subject) return;
+
+    // Get all snippets
+    const allSnippets = this.state.searchQuery
+      ? await DB.searchSnippets(this.state.searchQuery)
+      : await DB.getAllSnippets();
+
+    // Apply same filters
+    let filtered = allSnippets;
+    if (this.state.filters.language) {
+      filtered = filtered.filter(s => s.language === this.state.filters.language);
+    }
+    if (this.state.filters.subject) {
+      filtered = filtered.filter(s => s.subject === this.state.filters.subject);
+    }
+
+    // Check other types
+    if (currentType === 'code') {
+      const errorResults = filtered.filter(s => s.type === 'error');
+      if (errorResults.length > 0) {
+        UI.showToastWithAction(
+          `No code snippets found, but ${errorResults.length} error(s) match. Click to view.`,
+          'info',
+          () => this.switchView('errors')
+        );
+      }
+    } else if (currentType === 'error') {
+      const codeResults = filtered.filter(s => s.type === 'code');
+      if (codeResults.length > 0) {
+        UI.showToastWithAction(
+          `No errors found, but ${codeResults.length} snippet(s) match. Click to view.`,
+          'info',
+          () => this.switchView('snippets')
+        );
+      }
+    }
   },
 
   /**
@@ -516,7 +599,6 @@ const App = {
     document.documentElement.setAttribute('data-theme', this.state.theme);
     this.updateThemeIcon();
 
-    // Save to settings
     try {
       await DB.updateSettings({ theme: this.state.theme });
     } catch (error) {
