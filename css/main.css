@@ -1018,7 +1018,7 @@ code, pre {
   font-family: var(--font-mono);
   margin: 0;
   background: var(--subject-color);
-  color: #333;
+  color: #fefefe;
   border: none;
   transition: all var(--transition-fast);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -1451,4 +1451,16 @@ code, pre {
     right: var(--spacing-md);
     max-width: none;
   }
+}
+
+/* FIX: Tags in light mode */
+[data-theme="light"] .tag {
+  background: var(--subject-color);
+  color: white !important;
+}
+
+/* For light subject colors, use dark text */
+[data-theme="light"] .subject-4 .tag,
+[data-theme="light"] .subject-5 .tag {
+  color: #333 !important;
 }

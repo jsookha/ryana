@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-  <!-- Loading Screen (shown while app initializes) -->
+  <!-- Loading Screen -->
   <div id="loading-screen" class="loading-screen">
     <div class="loading-content">
       <h1>Ryana</h1>
@@ -34,7 +34,7 @@
   <!-- Main App Container -->
   <div id="app" class="app-container" style="display: none;">
     
-    <!-- Header / Navigation -->
+    <!-- Header -->
     <header class="app-header">
       <div class="header-left">
         <h1 class="app-title">Ryana</h1>
@@ -42,12 +42,10 @@
       </div>
       
       <div class="header-right">
-        <!-- Theme Toggle -->
         <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle dark/light theme">
           <span class="theme-icon">🌙</span>
         </button>
         
-        <!-- Settings -->
         <button id="settings-btn" class="icon-btn" title="Settings" aria-label="Open settings">
           <span>⚙️</span>
         </button>
@@ -60,19 +58,16 @@
       <!-- Sidebar Navigation -->
       <aside class="sidebar">
         <nav class="sidebar-nav">
-          <!-- NEW: Home View -->
           <button class="nav-btn active" data-view="home">
             <span class="nav-icon" id="icon-home">🏠</span>
             <span class="nav-label">Home</span>
           </button>
           
-          <!-- UPDATED: "All Snippets" → "Snippets" -->
           <button class="nav-btn" data-view="snippets">
             <span class="nav-icon" id="icon-snippets">📚</span>
             <span class="nav-label">Snippets</span>
           </button>
           
-          <!-- UPDATED: "Favorites" → "Favourites" (British English) -->
           <button class="nav-btn" data-view="favourites">
             <span class="nav-icon" id="icon-favourites">⭐</span>
             <span class="nav-label">Favourites</span>
@@ -108,10 +103,10 @@
         </div>
       </aside>
 
-      <!-- Content Views (Different pages will be shown/hidden here) -->
+      <!-- Content Views -->
       <section class="content-area">
         
-        <!-- Search Bar (appears on all views) -->
+        <!-- Search Bar -->
         <div class="search-container">
           <input 
             type="text" 
@@ -127,12 +122,10 @@
         <div class="filter-bar">
           <select id="language-filter" class="filter-select">
             <option value="">All Languages</option>
-            <!-- Populated dynamically -->
           </select>
           
           <select id="subject-filter" class="filter-select">
             <option value="">All Subjects</option>
-            <!-- Populated dynamically -->
           </select>
           
           <select id="sort-by" class="filter-select">
@@ -144,7 +137,7 @@
           </select>
         </div>
 
-        <!-- NEW: Home View (Shows ALL content) -->
+        <!-- Home View -->
         <div id="view-home" class="view active">
           <div class="view-header">
             <h2>All Content</h2>
@@ -152,14 +145,13 @@
           </div>
           
           <div id="home-grid" class="snippets-grid">
-            <!-- ALL snippets and errors will be rendered here -->
             <div class="empty-state">
               <p>No content yet. Create your first snippet or log an error!</p>
             </div>
           </div>
         </div>
 
-        <!-- UPDATED: "All Snippets" → "Snippets" View (Code only) -->
+        <!-- Snippets View -->
         <div id="view-snippets" class="view">
           <div class="view-header">
             <h2>Code Snippets</h2>
@@ -173,7 +165,7 @@
           </div>
         </div>
 
-        <!-- Favourites View (British English) -->
+        <!-- Favourites View -->
         <div id="view-favourites" class="view">
           <div class="view-header">
             <h2>Favourite Snippets</h2>
@@ -245,8 +237,6 @@
     </main>
   </div>
 
-  <!-- Modals (hidden by default, shown when needed) -->
-  
   <!-- Snippet Editor Modal -->
   <div id="snippet-modal" class="modal">
     <div class="modal-content modal-large">
@@ -255,9 +245,7 @@
         <button class="modal-close">&times;</button>
       </div>
       
-      <div class="modal-body">
-        <!-- Form will be populated dynamically -->
-      </div>
+      <div class="modal-body"></div>
       
       <div class="modal-footer">
         <button id="save-snippet-btn" class="btn btn-primary">Save Snippet</button>
@@ -274,9 +262,7 @@
         <button class="modal-close">&times;</button>
       </div>
       
-      <div class="modal-body">
-        <!-- Settings form will be populated dynamically -->
-      </div>
+      <div class="modal-body"></div>
     </div>
   </div>
 
@@ -293,7 +279,6 @@
   
   <!-- Service Worker Registration -->
   <script>
-    // Register service worker for offline support
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')

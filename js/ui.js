@@ -836,3 +836,13 @@ UI.createSubjectCardWithCounts = function(subject) {
   return card;
 };
 
+UI.showSubjectModal = function(subject = null) {
+  // Create modal if it doesn't exist
+  let modal = document.getElementById('subject-modal');
+  if (!modal) {
+    modal = this.createSubjectModal();
+  }
+  
+  // Rest of function...
+  modal.classList.add('active');
+};
