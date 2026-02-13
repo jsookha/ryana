@@ -454,16 +454,16 @@ const UI = {
   },
 
   /**
-   * Render subjects
-   * @param {Array} subjects - Array of subject objects
-   */
-  renderSubjects(subjects) {
+  * Render subjects with snippet/error counts
+  * @param {Array} subjects - Array of subject objects with counts
+  */
+  UI.renderSubjects = function(subjects) {
     const container = document.getElementById('subjects-grid');
-    
+  
     if (subjects.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <p>No subjects created. Add your courses to organize snippets!</p>
+          <p>No subjects created. Add your courses to organise snippets!</p>
         </div>
       `;
       return;
@@ -471,7 +471,7 @@ const UI = {
 
     container.innerHTML = '';
     subjects.forEach(subject => {
-      const card = this.createSubjectCard(subject);
+      const card = this.createSubjectCardWithCounts(subject);
       container.appendChild(card);
     });
   },
@@ -689,12 +689,11 @@ const UI = {
 };
 
 /**
- * ADD THESE FUNCTIONS TO YOUR EXISTING ui.js FILE
  * These enhance the UI with new capabilities
  */
 
 // ==========================================================================
-// ADD THIS FUNCTION - Toast with Action Button
+// Toast with Action Button
 // ==========================================================================
 
 /**
