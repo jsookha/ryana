@@ -998,7 +998,7 @@ code, pre {
   font-family: var(--font-mono);
   margin: 0;
   background: var(--subject-color);
-  color: white;
+  color: #efefef;
   border: none;
   transition: all var(--transition-fast);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
