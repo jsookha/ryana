@@ -1285,3 +1285,170 @@ code, pre {
     padding: var(--spacing-md);
   }
 }
+
+/**
+ * ADDED THESE STYLES TO main.css FILE
+ * Subject Modal, Color Picker, Update Notification, SVG Icons
+ */
+
+/* ==================== SVG ICONS IN NAVIGATION ==================== */
+
+.nav-svg-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+/* Color SVGs based on theme */
+.nav-svg-icon path,
+.nav-svg-icon circle,
+.nav-svg-icon rect,
+.nav-svg-icon polygon {
+  stroke: var(--text-primary);
+  transition: stroke var(--transition-fast);
+}
+
+.nav-btn.active .nav-svg-icon path,
+.nav-btn.active .nav-svg-icon circle,
+.nav-btn.active .nav-svg-icon rect,
+.nav-btn.active .nav-svg-icon polygon {
+  stroke: white;
+}
+
+/* ==================== SUBJECT MODAL FORM ==================== */
+
+.subject-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* ==================== COLOR PICKER GRID ==================== */
+
+.color-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
+}
+
+.color-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.color-swatch.selected {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.check-mark {
+  color: white;
+  font-size: var(--text-xl);
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Special handling for light colors */
+.color-swatch[data-color-index="4"] .check-mark,
+.color-swatch[data-color-index="5"] .check-mark {
+  color: #333;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* ==================== DELETE BUTTON ==================== */
+
+.btn-danger {
+  background: var(--error);
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ==================== UPDATE NOTIFICATION ==================== */
+
+.update-notification {
+  position: fixed;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  z-index: 3000;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 400px;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.update-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.update-content strong {
+  font-family: var(--font-title);
+  font-size: var(--text-lg);
+  color: var(--accent-primary);
+}
+
+.update-content p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.update-content button {
+  margin-top: var(--spacing-sm);
+  margin-right: var(--spacing-sm);
+}
+
+/* ==================== RESPONSIVE - COLOR PICKER ==================== */
+
+@media (max-width: 768px) {
+  .color-picker-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--spacing-sm);
+  }
+  
+  .update-notification {
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    max-width: none;
+  }
+}

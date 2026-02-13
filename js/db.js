@@ -386,15 +386,21 @@ const DB = {
   // ==================== SUBJECTS OPERATIONS ====================
 
   /**
-   * Add a new subject
-   * @param {Object} subject - Subject data
-   * @returns {Promise<string>}
-   */
+   * REPLACED addSubject FUNCTION in db.js WITH THIS VERSION
+   * Adds colorIndex field (1-10) for the new color system
+  */
+
+  /**
+  * Add a new subject
+  * @param {Object} subject - Subject data
+  * @returns {Promise<string>}
+  */
   async addSubject(subject) {
     const subjectData = {
       id: this.generateId(),
       name: subject.name,
       colorCode: subject.colorCode || this._generateRandomColor(),
+      colorIndex: subject.colorIndex || 1, // NEW: Default to color 1
       description: subject.description || '',
       year: subject.year || 1,
       semester: subject.semester || 1,

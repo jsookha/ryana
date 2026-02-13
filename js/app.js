@@ -227,6 +227,7 @@ const App = {
    */
   async loadInitialData() {
     try {
+      await UI.loadSVGIcons();
       await this.populateSubjectFilter();
       await this.populateLanguageFilter();
       await this.refreshCurrentView();
@@ -645,4 +646,44 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => App.init());
 } else {
   App.init();
+}
+
+/**
+ * ADDED TO THE END OF YOUR app.js FILE 
+ * (after App.init())
+ * Auto-update detection for service worker
+ */
+
+// Detect service worker updates and prompt user
+if ('serviceWorker' in navigator) {
+  let refreshing = false;
+
+  // Detect when new service worker is waiting
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+
+  // Check for updates
+  navigator.serviceWorker.ready.then(registration => {
+    // Check for updates every 60 seconds
+    setInterval(() => {
+      registration.update();
+    }, 60000);
+
+    // Listen for waiting service worker
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing;
+
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // New version available!
+          UI.showUpdateNotification(() => {
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+          });
+        }
+      });
+    });
+  });
 }

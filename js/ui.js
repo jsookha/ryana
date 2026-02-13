@@ -10,38 +10,52 @@ const UI = {
    * @param {Array} snippets - Array of snippet objects
    * @param {string} containerId - ID of container element
    */
-  renderSnippets(snippets, containerId) {
+  async renderSnippets(snippets, containerId) {
     const container = document.getElementById(containerId);
-    
+  
     if (snippets.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <p>No snippets found. Create your first one!</p>
+          <p>No snippets found.</p>
         </div>
       `;
       return;
     }
 
     container.innerHTML = '';
-    snippets.forEach(snippet => {
-      const card = this.createSnippetCard(snippet);
+  
+    // Create all cards (now async)
+    for (const snippet of snippets) {
+      const card = await this.createSnippetCard(snippet);
       container.appendChild(card);
-    });
+    }
   },
 
   /**
-   * Create a snippet card element
-   * @param {Object} snippet - Snippet object
-   * @returns {HTMLElement}
-   */
-  createSnippetCard(snippet) {
+  * Create a snippet card element - Now uses colorIndex from subject instead of subject name
+  * @param {Object} snippet - Snippet object
+  * @returns {HTMLElement}
+  */
+  async createSnippetCard(snippet) {
     const card = document.createElement('div');
     card.className = `snippet-card ${snippet.type === 'error' ? 'error-card' : ''}`;
-    
-    // Apply subject color if available
+  
+    // Apply subject color using colorIndex
     if (snippet.subject) {
-      const subjectClass = this.getSubjectClass(snippet.subject);
-      card.classList.add(subjectClass);
+      try {
+        const subjects = await DB.getAllSubjects();
+        const subject = subjects.find(s => s.name === snippet.subject);
+        if (subject && subject.colorIndex) {
+          card.classList.add(`subject-${subject.colorIndex}`);
+        } else {
+          card.classList.add('subject-1'); // Default color
+        }
+      } catch (error) {
+        console.error('[UI] Failed to get subject color:', error);
+        card.classList.add('subject-1'); // Default color
+      }
+    } else {
+      card.classList.add('subject-1'); // Default color for snippets without subject
     }
 
     // Create card content
@@ -49,27 +63,27 @@ const UI = {
       <div class="snippet-header">
         <h3 class="snippet-title">${this.escapeHtml(snippet.title)}</h3>
         <button class="favorite-btn ${snippet.favourite ? 'active' : ''}" 
-                data-id="${snippet.id}"
-                title="${snippet.favourite ? 'Remove from favorites' : 'Add to favorites'}">
+              data-id="${snippet.id}"
+              title="${snippet.favourite ? 'Remove from favourites' : 'Add to favourites'}">
           ${snippet.favourite ? '⭐' : '☆'}
         </button>
       </div>
-      
+    
       <div class="snippet-meta">
         <span class="snippet-language">${this.escapeHtml(snippet.language)}</span>
         ${snippet.subject ? `<span class="snippet-subject">${this.escapeHtml(snippet.subject)}</span>` : ''}
       </div>
-      
+    
       ${snippet.description ? `
-        <p class="snippet-description">${this.escapeHtml(snippet.description)}</p>
+      <p class="snippet-description">${this.escapeHtml(snippet.description)}</p>
       ` : ''}
-      
+    
       ${snippet.tags.length > 0 ? `
-        <div class="snippet-tags">
-          ${snippet.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
-        </div>
+      <div class="snippet-tags">
+        ${snippet.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
+      </div>
       ` : ''}
-      
+    
       <div class="snippet-footer">
         <span>${this.formatDate(snippet.updatedAt)}</span>
         <span>
@@ -727,7 +741,9 @@ UI.showToastWithAction = function(message, type = 'info', action) {
 };
 
 // ==========================================================================
-// REPLACE YOUR renderSubjects FUNCTION WITH THIS UPDATED VERSION
+// REPLACES renderSubjects FUNCTION WITH THIS UPDATED VERSION
+// This code is a duplicate within in the UI object, when I replaced it,  
+// I did not edit it correctly and reverted back to this version 
 // ==========================================================================
 
 /**
