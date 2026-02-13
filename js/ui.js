@@ -473,19 +473,19 @@ const UI = {
    */
   renderSubjects(subjects) {
     const container = document.getElementById('subjects-grid');
-    
+  
     if (subjects.length === 0) {
       container.innerHTML = `
-        <div class="empty-state">
-          <p>No subjects created. Add your courses to organize snippets!</p>
-        </div>
+      <div class="empty-state">
+        <p>No subjects created. Add your courses to organise snippets!</p>
+      </div>
       `;
       return;
     }
 
     container.innerHTML = '';
     subjects.forEach(subject => {
-      const card = this.createSubjectCard(subject);
+      const card = this.createSubjectCardWithCounts(subject);
       container.appendChild(card);
     });
   },
@@ -520,21 +520,14 @@ const UI = {
    */
   showSubjectModal(subject = null) {
     // Implementation similar to snippet modal
-    // For now, show a simple prompt
-    const name = prompt('Subject name:', subject?.name || '');
-    if (!name) return;
-
-    const description = prompt('Description (optional):', subject?.description || '');
-    const year = parseInt(prompt('Year:', subject?.year || '1'));
-    const semester = parseInt(prompt('Semester:', subject?.semester || '1'));
-
-    const subjectData = {
-      name,
-      description,
-      year,
-      semester
-    };
-
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('subject-modal');
+    if (!modal) {
+      modal = this.createSubjectModal();
+    }
+  
+    // Rest of function...
+    
     if (subject) {
       DB.updateSubject(subject.id, subjectData)
         .then(() => {
@@ -549,6 +542,9 @@ const UI = {
           App.populateSubjectFilter();
         });
     }
+
+    modal.classList.add('active');
+
   },
 
   /**
@@ -740,35 +736,6 @@ UI.showToastWithAction = function(message, type = 'info', action) {
   }, 8000);
 };
 
-// ==========================================================================
-// REPLACES renderSubjects FUNCTION WITH THIS UPDATED VERSION
-// This code is a duplicate within in the UI object, when I replaced it,  
-// I did not edit it correctly and reverted back to this version 
-// ==========================================================================
-
-/**
- * Render subjects with snippet/error counts
- * @param {Array} subjects - Array of subject objects with counts
- */
-UI.renderSubjects = function(subjects) {
-  const container = document.getElementById('subjects-grid');
-  
-  if (subjects.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <p>No subjects created. Add your courses to organise snippets!</p>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = '';
-  subjects.forEach(subject => {
-    const card = this.createSubjectCardWithCounts(subject);
-    container.appendChild(card);
-  });
-};
-
 /**
  * Create subject card with snippet/error counts
  * @param {Object} subject - Subject object with counts
@@ -834,15 +801,4 @@ UI.createSubjectCardWithCounts = function(subject) {
   });
 
   return card;
-};
-
-UI.showSubjectModal = function(subject = null) {
-  // Create modal if it doesn't exist
-  let modal = document.getElementById('subject-modal');
-  if (!modal) {
-    modal = this.createSubjectModal();
-  }
-  
-  // Rest of function...
-  modal.classList.add('active');
 };
