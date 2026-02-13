@@ -400,7 +400,7 @@ const DB = {
       id: this.generateId(),
       name: subject.name,
       colorCode: subject.colorCode || this._generateRandomColor(),
-      colorIndex: subject.colorIndex || 1, // NEW: Default to color 1
+      colorIndex: subject.colorIndex || 1, // THIS LINE IS CRITICAL
       description: subject.description || '',
       year: subject.year || 1,
       semester: subject.semester || 1,
